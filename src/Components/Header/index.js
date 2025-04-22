@@ -27,7 +27,6 @@ import { CiFilter } from "react-icons/ci";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { FaCodeCompare } from "react-icons/fa6";
 
-
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isOpenNav, setIsOpenNav] = useState(false);
@@ -118,7 +117,9 @@ const Header = () => {
           <div className="top-strip bg-blue">
             <div className="container">
               <p className="mb-0 mt-0 text-center">
-                Welcome to <b>MARKET-V</b>&nbsp;Where Shopping is SEAMLESS! We appreciate your patience as we ensure every order is handled with care.
+                Welcome to <b>MARKET-V</b>&nbsp;Where Shopping is SEAMLESS! We
+                appreciate your patience as we ensure every order is handled
+                with care.
               </p>
             </div>
           </div>
@@ -145,8 +146,9 @@ const Header = () => {
                         </Button>
 
                         <span className="count d-flex align-items-center justify-content-center">
-                          {context.cartData?.length > 0
-                            ? context.cartData?.length
+                          {Array.isArray(context.cartData) &&
+                          context.cartData.length > 0
+                            ? context.cartData.length
                             : 0}
                         </span>
                       </Link>
@@ -252,12 +254,12 @@ const Header = () => {
                             Logout
                           </MenuItem>
                           <Link to="/compare">
-                          <MenuItem>
-                            <ListItemIcon>
-                              <FaCodeCompare fontSize="small" />
-                            </ListItemIcon>
-                            Compare
-                          </MenuItem>
+                            <MenuItem>
+                              <ListItemIcon>
+                                <FaCodeCompare fontSize="small" />
+                              </ListItemIcon>
+                              Compare
+                            </MenuItem>
                           </Link>
                         </Menu>
                       </div>
@@ -266,9 +268,10 @@ const Header = () => {
                     <div className="ml-auto cartTab d-flex align-items-center">
                       {context.windowWidth > 1000 && (
                         <span className="price">
-                          {(context.cartData?.length !== 0
+                          {(Array.isArray(context.cartData) &&
+                          context.cartData.length !== 0
                             ? context.cartData
-                                ?.map(
+                                .map(
                                   (item) => parseInt(item.price) * item.quantity
                                 )
                                 .reduce((total, value) => total + value, 0)
@@ -286,8 +289,9 @@ const Header = () => {
                             <IoBagOutline />
                           </Button>
                           <span className="count d-flex align-items-center justify-content-center">
-                            {context.cartData?.length > 0
-                              ? context.cartData?.length
+                            {Array.isArray(context.cartData) &&
+                            context.cartData.length > 0
+                              ? context.cartData.length
                               : 0}
                           </span>
                         </Link>
@@ -329,10 +333,13 @@ const Header = () => {
             </Link>
 
             {context.enableFilterTab === true && (
-              <Button className="circle" onClick={() => {
-                openFilter();
-                setIsOpenSearch(false)
-              }}>
+              <Button
+                className="circle"
+                onClick={() => {
+                  openFilter();
+                  setIsOpenSearch(false);
+                }}
+              >
                 <div className="d-flex align-items-center justify-content-center flex-column">
                   <CiFilter />
                   <span className="title">Filters</span>
@@ -340,14 +347,14 @@ const Header = () => {
               </Button>
             )}
 
-            <Button className="circle" onClick={openSearch }>
+            <Button className="circle" onClick={openSearch}>
               <div className="d-flex align-items-center justify-content-center flex-column">
                 <IoIosSearch />
                 <span className="title">Search</span>
               </div>
             </Button>
 
-            <Link to="/my-list"  onClick={() => setIsOpenSearch(false)}>
+            <Link to="/my-list" onClick={() => setIsOpenSearch(false)}>
               <Button className="circle">
                 <div className="d-flex align-items-center justify-content-center flex-column">
                   <IoMdHeartEmpty />
@@ -356,17 +363,16 @@ const Header = () => {
               </Button>
             </Link>
 
-            <Link to="/orders"  onClick={() => setIsOpenSearch(false)}>
-            <Button className="circle">
-              <div className="d-flex align-items-center justify-content-center flex-column">
-                <IoBagCheckOutline />
-                <span className="title">Orders</span>
-              </div>
-            </Button>
-          </Link>
-            
+            <Link to="/orders" onClick={() => setIsOpenSearch(false)}>
+              <Button className="circle">
+                <div className="d-flex align-items-center justify-content-center flex-column">
+                  <IoBagCheckOutline />
+                  <span className="title">Orders</span>
+                </div>
+              </Button>
+            </Link>
 
-            <Link to="/my-account"  onClick={() => setIsOpenSearch(false)}>
+            <Link to="/my-account" onClick={() => setIsOpenSearch(false)}>
               <Button className="circle">
                 <div className="d-flex align-items-center justify-content-center flex-column">
                   <FaRegUser />

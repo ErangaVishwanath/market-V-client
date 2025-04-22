@@ -10,6 +10,28 @@ import { Link } from "react-router-dom";
 const Banners = (props) => {
   const context = useContext(MyContext);
 
+  const renderBannerItem = (item, index) => (
+    <div className={`col_`} key={index}>
+      {item?.subCatId !== null ? (
+        <Link to={`/products/subCat/${item?.subCatId}`} className="box">
+          <img
+            src={item?.images[0]}
+            className="w-100 transition"
+            alt="banner img"
+          />
+        </Link>
+      ) : (
+        <Link to={`/products/category/${item?.catId}`} className="box">
+          <img
+            src={item?.images[0]}
+            className="w-100 transition"
+            alt="banner img"
+          />
+        </Link>
+      )}
+    </div>
+  );
+
   return (
     <>
       <div className="bannerAds pt-3 pb-3">
@@ -41,74 +63,22 @@ const Banners = (props) => {
               },
             }}
           >
-            {props?.data?.length !== 0 &&
-              props?.data?.map((item, index) => {
-                return (
-                  <SwiperSlide key={index}>
-                    <div className={`col_`}>
-                      {item?.subCatId !== null ? (
-                        <Link
-                          to={`/products/subCat/${item?.subCatId}`}
-                          className="box"
-                        >
-                          <img
-                            src={item?.images[0]}
-                            className="w-100 transition"
-                            alt="banner img"
-                          />
-                        </Link>
-                      ) : (
-                        <Link
-                          to={`/products/category/${item?.catId}`}
-                          className="box"
-                        >
-                          <img
-                            src={item?.images[0]}
-                            className="w-100 transition"
-                            alt="banner img"
-                          />
-                        </Link>
-                      )}
-                    </div>
-                  </SwiperSlide>
-                );
-              })}
+            {Array.isArray(props?.data) &&
+              props?.data?.length > 0 &&
+              props.data.map((item, index) => (
+                <SwiperSlide key={index}>
+                  {renderBannerItem(item, index)}
+                </SwiperSlide>
+              ))}
           </Swiper>
         ) : (
           <div
             className="bannerSection pt-3"
             style={{ gridTemplateColumns: `repeat(${props?.col},1fr)` }}
           >
-            {props?.data?.length !== 0 &&
-              props?.data?.map((item, index) => {
-                return (
-                   <div className={`col_`}>
-                      {item?.subCatId !== null ? (
-                        <Link
-                          to={`/products/subCat/${item?.subCatId}`}
-                          className="box"
-                        >
-                          <img
-                            src={item?.images[0]}
-                            className="w-100 transition"
-                            alt="banner img"
-                          />
-                        </Link>
-                      ) : (
-                        <Link
-                          to={`/products/category/${item?.catId}`}
-                          className="box"
-                        >
-                          <img
-                            src={item?.images[0]}
-                            className="w-100 transition"
-                            alt="banner img"
-                          />
-                        </Link>
-                      )}
-                    </div>
-                );
-              })}
+            {Array.isArray(props?.data) &&
+              props?.data?.length > 0 &&
+              props.data.map((item, index) => renderBannerItem(item, index))}
           </div>
         )}
       </div>

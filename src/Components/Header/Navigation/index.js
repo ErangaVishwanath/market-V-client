@@ -34,6 +34,24 @@ const Navigation = (props) => {
     history("/signIn");
   };
 
+  const renderSubMenu = (children) => {
+    if (!Array.isArray(children) || children.length === 0) return null;
+
+    return (
+      <div className="submenu">
+        {children.map((subCat, key) => (
+          <Link
+            to={`/products/subCat/${subCat?._id}`}
+            key={key}
+            onClick={props.closeNav}
+          >
+            <Button>{subCat?.name}</Button>
+          </Link>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <nav>
       <div className="container">
@@ -59,36 +77,23 @@ const Navigation = (props) => {
                 }`}
               >
                 <ul>
-                  {props.navData?.map((item, index) => {
-                    return (
-                      <li>
+                  {Array.isArray(props.navData) &&
+                    props.navData.map((item, index) => (
+                      <li key={index}>
                         <Link to={`/products/category/${item?._id}`}>
                           <Button>
                             <img
                               src={item?.images[0]}
                               width="20"
                               className="mr-2"
-                            />{" "}
+                              alt={item?.name}
+                            />
                             {item?.name} <FaAngleRight className="ml-auto" />
                           </Button>
                         </Link>
-                        {item?.children?.length !== 0 && (
-                          <div className="submenu">
-                            {item?.children?.map((subCat, key) => {
-                              return (
-                                <Link
-                                  to={`/products/subCat/${subCat?._id}`}
-                                  key={key}
-                                >
-                                  <Button>{subCat?.name}</Button>
-                                </Link>
-                              );
-                            })}
-                          </div>
-                        )}
+                        {renderSubMenu(item?.children)}
                       </li>
-                    );
-                  })}
+                    ))}
                 </ul>
               </div>
             </div>
@@ -112,21 +117,19 @@ const Navigation = (props) => {
 
               <ul className="list list-inline ml-auto">
                 {context.windowWidth < 992 && (
-                  <>
-                    <li className="list-inline-item">
-                      <div className="p-3">
-                        {context.countryList.length !== 0 &&
-                          context.windowWidth < 992 && <CountryDropdown />}
-                      </div>
-                    </li>
-                  </>
+                  <li className="list-inline-item">
+                    <div className="p-3">
+                      {context.countryList.length !== 0 &&
+                        context.windowWidth < 992 && <CountryDropdown />}
+                    </div>
+                  </li>
                 )}
 
-                {props.navData
-                  ?.filter((item, idx) => idx < 6)
-                  .map((item, index) => {
-                    return (
-                      <li className="list-inline-item">
+                {Array.isArray(props.navData) &&
+                  props.navData
+                    .filter((item, idx) => idx < 6)
+                    .map((item, index) => (
+                      <li className="list-inline-item" key={index}>
                         <Link
                           to={`/products/category/${item?._id}`}
                           onClick={props.closeNav}
@@ -136,12 +139,14 @@ const Navigation = (props) => {
                               src={item?.images[0]}
                               width="20"
                               className="mr-2"
-                            />{" "}
+                              alt={item?.name}
+                            />
                             {item?.name}
                           </Button>
                         </Link>
 
-                        {item?.children?.length !== 0 &&
+                        {Array.isArray(item?.children) &&
+                          item?.children?.length > 0 &&
                           context.windowWidth < 992 && (
                             <span
                               className={`arrow ${
@@ -155,16 +160,16 @@ const Navigation = (props) => {
                             </span>
                           )}
 
-                        {item?.children?.length !== 0 && (
-                          <div
-                            className={`submenu ${
-                              isOpenSubMenuIndex === index &&
-                              isOpenSubMenu_ === true &&
-                              "open"
-                            }`}
-                          >
-                            {item?.children?.map((subCat, key) => {
-                              return (
+                        {Array.isArray(item?.children) &&
+                          item?.children?.length > 0 && (
+                            <div
+                              className={`submenu ${
+                                isOpenSubMenuIndex === index &&
+                                isOpenSubMenu_ === true &&
+                                "open"
+                              }`}
+                            >
+                              {item?.children?.map((subCat, key) => (
                                 <Link
                                   to={`/products/subCat/${subCat?._id}`}
                                   key={key}
@@ -172,14 +177,13 @@ const Navigation = (props) => {
                                 >
                                   <Button>{subCat?.name}</Button>
                                 </Link>
-                              );
-                            })}
-                          </div>
-                        )}
+                              ))}
+                            </div>
+                          )}
                       </li>
-                    );
-                  })}
+                    ))}
               </ul>
+
               {context.windowWidth < 992 && (
                 <>
                   {context?.isLogin === false ? (
